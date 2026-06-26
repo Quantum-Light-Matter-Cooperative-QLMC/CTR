@@ -112,8 +112,8 @@ A typical simulation workflow is:
 3. Compute the elctron energy, $\gamma$, and $\beta$.
 4. Compute the single-electron spectrum ($W_1$).
 5. Define the electron bunch density.
-6. Compute the bunch form factor (|F|^2).
-7. Compute the total bunch spectrum (W_N).
+6. Compute the bunch form factor ($|F|^2$).
+7. Compute the total bunch spectrum ($W_N$).
 8. Plot total bunch spectrum results.
 10. Integrate spectrum.
 11. Plot total photon count results.
@@ -146,7 +146,7 @@ matplotlib
 ## Future Improvements
 Future versions will include:
 
-- Non approximated form factors
+- Exact, three-dimensional form factors
 - Azimuthal angle dependence
 - The ability to model tilted interfaces
 - Adding experimental detector acceptances
