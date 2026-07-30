@@ -22,11 +22,11 @@ where:
 ## Main Features
 This code can be used to do the following:
 
-- Compute the single-electron CTR anfular spectrum
+- Compute the single-electron CTR angular spectrum
 - Define Gaussian, orbital angular momentum (OAM), and Airy-like electron bunch distributions
 - Calculate three-dimensional bunch form factors
 - Compute coherent and incoherent radiation contributions
-- Generate CTR specta over angle to estimate total photon count
+- Generate CTR spectra over angle to estimate total photon count
 - Compare coherence thresholds for different pulse durations (only applicable for Gaussian and OAM distributions)
 - Study how bunch structure affects the emitted CTR spectrum
 
