@@ -1,11 +1,11 @@
-# Coherent Transisition Radiation from Various Electron Bunch Distributions
+# Coherent Transition Radiation from Various Electron Bunch Distributions
 
 This repository contains Python code for simulating coherent transition radiation (CTR) emitted by relativistic electron bunches. The code computes single-electron transition radiation spectra, bunch form factors, coherent and incoherent radiation contributions, and integrated photon counts as a function of wavelength and emission angle.
 
 The simulation is intended to study how different electron bunch distributions, pulse durations, and beam geometries affect CTR emission.
 
 ## Background
-Transition radiation is produced when a charged particle crosses the boundary between two media of distinct dielectric constants. The charged particle must "rearrange" its field as a result of the different media. It is this rearrangement that produces transition radiation. FOr an electron bunch, the total emitted radiation depends not only on the single-electron radiation spectrum, but also on the spatial distribution of the bunch.
+Transition radiation is produced when a charged particle crosses the boundary between two media of distinct dielectric constants. The charged particle must "rearrange" its field because of the different media. This rearrangement produces transition radiation. For an electron bunch, the total emitted radiation depends not only on the single-electron radiation spectrum, but also on the spatial distribution of the bunch.
 
 The total bunch spectrum is modeled as:
 
@@ -84,17 +84,17 @@ $\rho(\bar{r})\propto \exp{\left(-\frac{x^2+y^2}{2\sigma^2_T}\right)} \exp{\left
 
 
 #### OAM Bunch
-An OAM bunch includes an azimuthhally structured transverse profile:
+An OAM bunch includes an azimuthally structured transverse profile:
 
 $\rho(\bar{r})\propto \frac{(x^2+y^2)^{\ell}}{\pi^{3/2}}\exp{\left(-\frac{x^2+y^2}{2\sigma^2_T}\right)}\exp{\left(-\frac{z^2}{2\sigma^2_L}\right)}$.
 
 #### Airy Bunch
-An Airy bunch serves as a unique case as Airy distributions do not belong to the family of eigenfunctions of the angular momentum operator and therefore do not share the common structure of Gaussian and OAM beams. Therefore, the Airy bunch is defined with respect to two dimensions rather than three: a propagation distance $z$ and a transverse simension $x$, where $s=\frac{x}{\sigma_T}$ and $\xi=\frac{z}{k\sigma_T}$:
+An Airy bunch serves as a unique case, as Airy distributions do not belong to the family of eigenfunctions of the angular momentum operator and therefore do not share the common structure of Gaussian and OAM beams. Therefore, the Airy bunch is defined with respect to two dimensions rather than three: a propagation distance $z$ and a transverse dimension $x$, where $s=\frac{x}{\sigma_T}$ and $\xi=\frac{z}{k\sigma_T}$:
 
 $\rho(\xi,s)\propto\text{Ai}\left(s-\frac{\xi^2}{4}+ia s\right)\exp{\left(a\left[s-\frac{\xi^2}{2}\right]+i\left[\frac{s\xi}{2}-\frac{\xi^3}{12}+\frac{a^2\xi}{2}\right]\right)}$.
 
 ### 4. Form Factor Calculation
-The bunch form factor is calculated from the FOurier transform of the charge density:
+The bunch form factor is calculated from the Fourier transform of the charge density:
 
 $f(\bar{k}) = \int \rho(\bar{r})e^{i\bar{k} \cdot \bar{r}} d^3\bar{r}$.
 
@@ -114,7 +114,7 @@ A typical simulation workflow is:
 5. Define the electron bunch density.
 6. Compute the bunch form factor ($|F|^2$).
 7. Compute the total bunch spectrum ($W_N$).
-8. Plot total bunch spectrum results.
+8. Plot the total bunch spectrum results.
 10. Integrate spectrum.
 11. Plot total photon count results.
 
@@ -133,7 +133,7 @@ Several assumptions are used in the current iteration of the code:
 - The bunch is treated classically using a spatial charge-density form factor
 - The radiation is calculated in the far-field approximation.
 - The interface is assumed to be planar and normal to the beam axis.
-- Many calculation integrate over the full azimuthal angle, reducing the problem to dependence on observation angle and wavelength
+- Many calculations integrate over the full azimuthal angle, reducing the problem to dependence on observation angle and wavelength
 - The longitudinal bunch size strongly controls the coherence threshold
 
 ## Requirements
@@ -146,7 +146,6 @@ matplotlib
 ## Future Improvements
 Future versions will include:
 
-- Exact, three-dimensional form factors
-- Azimuthal angle dependence
-- The ability to model tilted interfaces
 - Adding experimental detector acceptances
+- Coupling to PIC simulations
+  
