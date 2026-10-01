@@ -136,24 +136,23 @@ The magnitude ($|F|^2$) is then used to calculate the bunch's spectrum.
 ## Typical Workflow
 A typical simulation workflow is:
 
-1. Define physical constants and simulation parameters.
-2. Define wavelength and angular grids.
-3. Compute the elctron energy, $\gamma$, and $\beta$.
-4. Compute the single-electron spectrum ($W_1$).
-5. Define the electron bunch density.
-6. Compute the bunch form factor ($|F|^2$).
-7. Compute the total bunch spectrum ($W_N$).
-8. Plot the total bunch spectrum results.
-10. Integrate spectrum.
-11. Plot total photon count results.
+1. Imports and physical constants
+2. Beam/electron/radiator parameters
+3. Observation grid
+4. Single electron tilted interface transition radiation
+5. Beam density models and profile plots
+6. 2D/3D form factors
+7. Bunch CTR spectrum
+8. Longitudinal coherence calculations
+9. Optional finite-radiator diagnostic
 
 ## Example Use Cases
 The code can be used to study:
 
 - How pulse duration affects the onset of coherence
 - How CTR spectrum changes with electron energy
-- How OAM bunch profiles compare to Gaussian profiles
-- How Airy propagation affects emitted spectrum
+- How hollow Gaussian bunch profiles compare to Gaussian profiles
+- How Airy propagation affects spectrum
 - How coherence depends on wavelength and observation angle
 
 ## Notes and Assumptions
