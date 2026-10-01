@@ -22,31 +22,32 @@ where:
 ## Main Features
 This code can be used to do the following:
 
-- Compute the single-electron CTR angular spectrum
-- Define Gaussian, orbital angular momentum (OAM), and Airy-like electron bunch distributions
+- Compute the single-electron CTR angular spectrum from tilted and finite interfaces
+- Define Gaussian, hollow Gaussian, and Airy-like electron bunch distributions
 - Calculate three-dimensional bunch form factors
 - Compute coherent and incoherent radiation contributions
-- Generate CTR spectra over angle to estimate total photon count
-- Compare coherence thresholds for different pulse durations (only applicable for Gaussian and OAM distributions)
+- Generate CTR spectra at specific angular slices
+- Compare coherence thresholds for different pulse durations
 - Study how bunch structure affects the emitted CTR spectrum
 
 ## Physical Quantities
 The main physical parameters used in the simulation include:
 | Symbol | Meaning |
 | --- | --- |
-| $N_e$ | Number of electrons in the bunch |
-| $\beta$ | Electron velocity normalized to the speed of light |
-| $\gamma$ | Relativistic Lorentz factor |
-| $\lambda$ | Radiation wavelength |
-| $\omega$ | Angular frequency |
-| $\theta$ | Observation angle |
-| $\sigma_t$ | Pulse duration |
-| $\sigma_T$ | Transverse bunch size |
-| $\sigma_L$ | Longitudinal bunch size |
-| $z$ | Propagation distance |
-| $a$ | Apodization level |
-| $\ell$ | Topological order |
-| $F$ | Bunch form factor |
+| $\tau$ | Temporal bunch length |
+| $\sigma_T$ | Transverse beam size |
+| $\sigma_L$ | Longitudinal beam size |
+| $\lambda$ | Emission wavelength |
+| $a$ | Angular frequency |
+| $\theta$ | Interface radius |
+| $\psi$ | Interface tilt |
+| $\phi$ | Azimuthal observation angle |
+| $Q$ | Bunch charge |
+| $E$ | Pkinetic beam energy |
+| $\gamma$ | Lorentz factor |
+| $\theta$ | Normal observation angle |
+| $\z_{prop}$ | Airy propagation length |
+| $\alpha$ | Airy apodization |
 | $W_1$ | Single-electron radiation spectrum |
 | $W_N$ | Total bunch radiation spectrum | 
 
@@ -80,27 +81,31 @@ The code currently supports three different bunch distributions.
 #### Gaussian Bunch
 A Gaussian bunch serves as a useful baseline model:
 
-$\rho(\bar{r})\propto \exp{\left(-\frac{x^2+y^2}{2\sigma^2_T}\right)} \exp{\left(-\frac{z^2}{2\sigma^2_L}\right)}$.
+$\rho(x,y,z)\propto \exp{\left(-\frac{x^2}{2\sigma^2_x}\right)}\exp{\left(-\frac{y^2}{2\sigma^2_y}\right)}\exp{\left(-\frac{z^2}{2\sigma^2_z}\right)}$
 
+#### Hollow Gaussian Bunch
+A hollow Gaussian bunch includes an azimuthally structured transverse profile:
 
-#### OAM Bunch
-An OAM bunch includes an azimuthally structured transverse profile:
-
-$\rho(\bar{r})\propto \frac{(x^2+y^2)^{\ell}}{\pi^{3/2}}\exp{\left(-\frac{x^2+y^2}{2\sigma^2_T}\right)}\exp{\left(-\frac{z^2}{2\sigma^2_L}\right)}$.
+$\rho(x,y,z)\propto \frac{(x^2+y^2)^{p}}{\pi^{3/2}}\exp{\left(-\frac{x^2}{2\sigma^2_x}\right)}\exp{\left(-\frac{y^2}{2\sigma^2_y}\right)}\exp{\left(-\frac{z^2}{2\sigma^2_z}\right)}.$
 
 #### Airy Bunch
 An Airy bunch serves as a unique case, as Airy distributions do not belong to the family of eigenfunctions of the angular momentum operator and therefore do not share the common structure of Gaussian and OAM beams. Therefore, the Airy bunch is defined with respect to two dimensions rather than three: a propagation distance $z$ and a transverse dimension $x$, where $s=\frac{x}{\sigma_T}$ and $\xi=\frac{z}{k\sigma_T}$:
 
-$\rho(\xi,s)\propto\text{Ai}\left(s-\frac{\xi^2}{4}+ia s\right)\exp{\left(a\left[s-\frac{\xi^2}{2}\right]+i\left[\frac{s\xi}{2}-\frac{\xi^3}{12}+\frac{a^2\xi}{2}\right]\right)}$.
+$\rho(x,y,z)
+&\propto
+\mathrm{Ai}\left(\frac{x}{\sigma_x} - \frac{z}{4k^2\sigma_x^4} + i\frac{\alpha z}{k\sigma_x^2}\right)
+\mathrm{Ai}\left(\frac{y}{\sigma_y} - \frac{z}{4k^2\sigma_y^4} + i\frac{\alpha z}{k\sigma_y^2}\right)
+\\
+&\quad\times
+\exp\left(\frac{\alpha x}{\sigma_x} - \frac{\alpha^2z^2}{2k^2\sigma_x^4} - i\frac{z^3}{12k^3\sigma_x^6} + i\frac{\alpha^2z}{2k\sigma_x^2} + i\frac{xz}{2k\sigma_x^2}\right)
+\\
+&\quad\times
+\exp\left(\frac{\alpha y}{\sigma_y} - \frac{\alpha^2z^2}{2k^2\sigma_y^4} - i\frac{z^3}{12k^3\sigma_y^6} + i\frac{\alpha^2z}{2k\sigma_y^2} + i\frac{yz}{2k\sigma_y^2}\right).$
 
 ### 4. Form Factor Calculation
 The bunch form factor is calculated from the Fourier transform of the charge density:
 
 $f(\bar{k}) = \int \rho(\bar{r})e^{i\bar{k} \cdot \bar{r}} d^3\bar{r}$.
-
-For a longitudinal-only model, the relevant wavevector component is expressed as:
-
-$k_z=\frac{\omega}{c}(1-\beta\cos{\theta})$.
 
 The magnitude ($|F|^2$) is then used to calculate the bunch's spectrum.
 
