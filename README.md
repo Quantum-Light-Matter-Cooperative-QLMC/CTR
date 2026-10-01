@@ -46,7 +46,7 @@ The main physical parameters used in the simulation include:
 | $E$ | Pkinetic beam energy |
 | $\gamma$ | Lorentz factor |
 | $\theta$ | Normal observation angle |
-| $\z_{prop}$ | Airy propagation length |
+| $z_{prop}$ | Airy propagation length |
 | $\alpha$ | Airy apodization |
 | $W_1$ | Single-electron radiation spectrum |
 | $W_N$ | Total bunch radiation spectrum | 
@@ -58,15 +58,48 @@ The code is organized around the following modules:
 ### 1. Physical Constants and Parameters
 The code begins by defining the usual constants:
 ```
-c = 3e8
-eps0 = 8.854e-12
-e = 1.602e-19
+# Physical constants
+c = 299792458.0
+e = 1.60217663e-19
+h = 6.62607015e-34
+eps0 = 8.854187812e-12
+m_e_MeV = 0.51099895
+
+
+# Electron-beam parameters
+E_MeV = 100.0                    #kinetic energy [MeV]
+bunchcharge = 5e-12              #bunch charge [C]
+sigma_x = 100e-6                 #transverse rms scale [m]
+sigma_y = 100e-6                 #transverse rms scale [m]
+sigma_t = 1e-15                  #temporal rms scale [s]
+sigma_z = c * sigma_t            #longitudinal rms scale [m]
+
+#Hollow-Gaussian parameter
+p_hollow = 3
+
+#Finite-energy Airy parameters
+airy_apodization = 0.05
+z_prop = 10e6                    #Airy propagation coordinate [m]
+
+#Interface parameters
+psi = np.deg2rad(45.0)           #interface tilt
+interface_radius = 1e-3          #finite radiator radius [m]
+
+#Select which bunch to use for the CTR calculation: "gaussian", "hollow", or "airy"
+beam_case = "airy"
 ```
 Typical simulation inputs include:
 ```
-bunchcharge = 5e-12
+# Observation grid
+Nangle = 100
+Nlam = 100
+
+th = np.linspace(0.68, 0.88, Nangle)
+phi = np.linspace(0.0, 2.0 * np.pi, Nangle, endpoint=False)
 lam = np.linspace(1e-6, 1e-5, Nlam)
-th = np.linspace(-0.2, 0.2, Nangle)
+
+LAM, TH, PHI = np.meshgrid(lam, th, phi, indexing="ij")
+OMEGA = 2.0*np.pi*c / LAM
 ```
 
 ### 2. Single-Electron CTR Spectrum
@@ -91,16 +124,7 @@ $\rho(x,y,z)\propto \frac{(x^2+y^2)^{p}}{\pi^{3/2}}\exp{\left(-\frac{x^2}{2\sigm
 #### Airy Bunch
 An Airy bunch serves as a unique case, as Airy distributions do not belong to the family of eigenfunctions of the angular momentum operator and therefore do not share the common structure of Gaussian and OAM beams. Therefore, the Airy bunch is defined with respect to two dimensions rather than three: a propagation distance $z$ and a transverse dimension $x$, where $s=\frac{x}{\sigma_T}$ and $\xi=\frac{z}{k\sigma_T}$:
 
-$\rho(x,y,z)
-&\propto
-\mathrm{Ai}\left(\frac{x}{\sigma_x} - \frac{z}{4k^2\sigma_x^4} + i\frac{\alpha z}{k\sigma_x^2}\right)
-\mathrm{Ai}\left(\frac{y}{\sigma_y} - \frac{z}{4k^2\sigma_y^4} + i\frac{\alpha z}{k\sigma_y^2}\right)
-\\
-&\quad\times
-\exp\left(\frac{\alpha x}{\sigma_x} - \frac{\alpha^2z^2}{2k^2\sigma_x^4} - i\frac{z^3}{12k^3\sigma_x^6} + i\frac{\alpha^2z}{2k\sigma_x^2} + i\frac{xz}{2k\sigma_x^2}\right)
-\\
-&\quad\times
-\exp\left(\frac{\alpha y}{\sigma_y} - \frac{\alpha^2z^2}{2k^2\sigma_y^4} - i\frac{z^3}{12k^3\sigma_y^6} + i\frac{\alpha^2z}{2k\sigma_y^2} + i\frac{yz}{2k\sigma_y^2}\right).$
+$\rho(x,y,z)\propto\mathrm{Ai}\left(\frac{x}{\sigma_x} - \frac{z}{4k^2\sigma_x^4} + i\frac{\alpha z}{k\sigma_x^2}\right)\mathrm{Ai}\left(\frac{y}{\sigma_y} - \frac{z}{4k^2\sigma_y^4} + i\frac{\alpha z}{k\sigma_y^2}\right)\times\exp\left(\frac{\alpha x}{\sigma_x} - \frac{\alpha^2z^2}{2k^2\sigma_x^4} - i\frac{z^3}{12k^3\sigma_x^6} + i\frac{\alpha^2z}{2k\sigma_x^2} + i\frac{xz}{2k\sigma_x^2}\right)\times\exp\left(\frac{\alpha y}{\sigma_y} - \frac{\alpha^2z^2}{2k^2\sigma_y^4} - i\frac{z^3}{12k^3\sigma_y^6} + i\frac{\alpha^2z}{2k\sigma_y^2} + i\frac{yz}{2k\sigma_y^2}\right).$
 
 ### 4. Form Factor Calculation
 The bunch form factor is calculated from the Fourier transform of the charge density:
